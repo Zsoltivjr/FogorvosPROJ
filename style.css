@@ -1,0 +1,127 @@
+@import 'custom.css';
+@keyframes myAnim {
+  0% {
+    animation-timing-function: ease-in;
+    opacity: 0;
+    transform: translateY(-250px);
+  }
+  38% {
+    animation-timing-function: ease-out;
+    opacity: 1;
+    transform: translateY(0);
+  }
+  55% {
+    animation-timing-function: ease-in;
+    transform: translateY(-65px);
+  }
+  72% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+  81% {
+    animation-timing-function: ease-in;
+    transform: translateY(-28px);
+  }
+  90% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+  95% {
+    animation-timing-function: ease-in;
+    transform: translateY(-8px);
+  }
+  100% {
+    animation-timing-function: ease-out;
+    transform: translateY(0);
+  }
+}
+#appointment {
+  animation: register 4s ease 2s 100 normal forwards;
+}
+
+#appointment1 {
+  animation: register 4s ease 2s 100 normal forwards;
+}
+
+@keyframes register {
+  0%, 100% {
+    transform: translateX(0%);
+    transform-origin: 50% 50%;
+  }
+  15% {
+    transform: translateX(-30px) rotate(-6deg);
+  }
+  30% {
+    transform: translateX(15px) rotate(6deg);
+  }
+  45% {
+    transform: translateX(-15px) rotate(-3.6deg);
+  }
+  60% {
+    transform: translateX(9px) rotate(2.4deg);
+  }
+  75% {
+    transform: translateX(-6px) rotate(-1.2deg);
+  }
+}
+#flyIn {
+  animation: flyin 1s ease 0s 1 normal forwards;
+}
+
+@keyframes flyin {
+  0% {
+    opacity: 0;
+    transform: translateX(-250px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+#logIn {
+  animation: loginPage 1s ease 0s 1 normal forwards;
+}
+
+@keyframes loginPage {
+  0% {
+    opacity: 0;
+    transform: translateY(250px) rotate(200deg);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) rotate(0deg);
+  }
+}
+#login-anim {
+  animation: loginButton 4s ease 2s 3 normal forwards;
+}
+
+@keyframes loginButton {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  10%, 30%, 50%, 70% {
+    transform: translateY(-8px);
+  }
+  20%, 40%, 60% {
+    transform: translateY(8px);
+  }
+  80% {
+    transform: translateY(6.4px);
+  }
+  90% {
+    transform: translateY(-6.4px);
+  }
+}
+@media (max-width: 991px) {
+  #custom-sizing {
+    padding: 1em !important;
+  }
+  #rpwCustomImage {
+    width: 50% !important;
+    height: auto !important;
+  }
+}
+.list-group-flush .list-group-item {
+  background-color: rgb(225, 245, 250) !important;
+}/*# sourceMappingURL=style.css.map */

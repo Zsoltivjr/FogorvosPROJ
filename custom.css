@@ -1,0 +1,111 @@
+body{
+    background-color: rgb(225, 245, 250);
+    color: white;
+    font-family: 'Alegreya Sans', sans-serif;
+    font-family: 'Roboto', sans-serif;  
+}
+a{
+    color: white;
+    text-decoration: none;
+}
+a:hover{
+  color: orange;
+}
+.admin{
+  background: #cce3b8;
+  color: black;
+}
+.welcome-section {
+    background: rgba(0, 0, 0, 0.6) url(img/dentist.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-blend-mode: darken;
+    height: 600px;
+    border-bottom: 5px solid black;
+    animation: myAnim 1s ease 0s 1 normal none;
+}
+.welcome-section h1{
+    padding-top: 175px;
+}
+.registered-section {
+  background-color: black;
+    background: rgba(0, 0, 0, 0.6) url(img/registered.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-blend-mode: darken;
+    height: 600px;
+    border-bottom: 5px solid black;
+    
+}
+.registered-section h1{
+    padding-top: 175px;
+}
+#appointment{
+    margin-top: 50px;
+}
+.content-section{
+    color: black;
+    margin-top: 75px;
+}
+.content-section img{
+    width: 85%;
+    margin-top: 5em;
+}
+
+.appointment-section {
+    background: rgba(0, 0, 0, 0.6) url(img/appointment1.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-blend-mode: darken;
+    height: 500px;
+    border-bottom: 5px solid black;
+}
+.appointment-section h1{
+    padding-top: 175px;
+}
+footer{
+    margin-top: 1px;
+}
+/* photo gallery */
+.photo-gallery {
+    color:#313437;
+    background-color:#fff;
+  }
+  
+  .photo-gallery p {
+    color:#7d8285;
+  }
+  
+  .photo-gallery h2 {
+    font-weight:bold;
+    margin-bottom:40px;
+    padding-top:40px;
+    color:inherit;
+  }
+  
+  @media (max-width:767px) {
+    .photo-gallery h2 {
+      margin-bottom:25px;
+      padding-top:25px;
+      font-size:24px;
+    }
+  }
+  
+  .photo-gallery .intro {
+    font-size:16px;
+    max-width:500px;
+    margin:0 auto 40px;
+  }
+  
+  .photo-gallery .intro p {
+    margin-bottom:0;
+  }
+  
+  .photo-gallery .photos {
+    padding-bottom:20px;
+  }
+  
+  .photo-gallery .item {
+    padding-bottom:30px;
+  }
+  
