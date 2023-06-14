@@ -1,3 +1,4 @@
+<?php session_start() ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -38,33 +39,20 @@
       <!-- navbar ends -->
       <div id="flyIn" class="content-section text-center mb-3">
         <h1 class="display-4 pb-5">Forgot Your Password?</h1>
-        <p>No worries, just enter your existing Username and Your Birthday, then enter a New Password to visit Primus Dental!</p>
+        <p>No worries, just enter your existing E-mail to recover your password!</p>
         <div class="container">
             <div class="row">
               <div id="custom-sizing" class="col-lg">
                 <img id="rpwCustomImage" src="img/forgotpw.jpg" class="img-fluid rounded w-75" alt="dentinst-in-action">
               </div>
               <div id="custom-sizing" class="col-lg text-center pt-5">
-              <form class="pt-2" method="POST" enctype="multipart/form-data">
+              <form class="pt-2" method="POST" name="recover" enctype="multipart/form-data">
                     <div class="form-group">
-                      <label>Username</label>
-                      <input type="text" class="form-control text-center" autocomplete="off" minlength="4" maxlength="16" name="username" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Birthday</label>
-                        <div class="datepicker date input-group">
-                            <input type="text" autocomplete="off" placeholder="" class="form-control" id="date" name="birthday" required>
-                              <div class="input-group-append">
-                                  <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                              </div>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                      <label>New Password <br> <small>(At least 6 characters, upper/lowercase and a special symbol)</small></label>
-                      <input type="password" class="form-control text-center" autocomplete="off" name="newpassword" minlength="6" pattern="(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,16}" required>
+                      <label>E-mail</label>
+                      <input type="text" class="form-control text-center" autocomplete="off" minlength="4" maxlength="100" name="email" required>
                     </div>
                     <div class="pt-3">
-                        <button  name="submit" type="submit" class="btn btn-primary" value="login">Submit</button>          
+                        <button  name="recover" type="submit" class="btn btn-primary" value="login">Submit</button>          
                     </div>
                   </form>
               </div>
@@ -81,28 +69,79 @@
        <?php
             include 'cfg.php';
           
-            if(isset($_POST['submit'])){
-
-            $existingUser = $_POST['username'];
-            $birthday = $_POST['birthday'];
-            $newPw = $_POST['newpassword'];
-
-            $select = mysqli_query($con, "SELECT * FROM register WHERE username = '$existingUser' AND birthday = '$birthday'");
-            $row = mysqli_fetch_array($select);
-                if(is_array($row)){
-                    mysqli_query($con, "UPDATE register set password = '$newPw' WHERE username = '$existingUser' AND birthday ='$birthday'");
-                    echo "<script>
-                    alert('Password Changed Successfully, redirecting to Log in Page!')
-                    window.location.href='login.php'
-                    </script>";
-                } else {
-                    echo "<script>
-                    alert('Invalid Username or Birthday, try again!')
-                    window.location.href='resetpw.php'
-                    </script>";
+            if(isset($_POST["recover"])){
+                $email = $_POST["email"];
+        
+                $sql = mysqli_query($con, "SELECT * FROM register WHERE email='$email'");
+                $query = mysqli_num_rows($sql);
+                $fetch = mysqli_fetch_assoc($sql);
+        
+                if(mysqli_num_rows($sql) <= 0){
+                    ?>
+                    <script>
+                        alert("<?php  echo "Sorry, no emails exists "?>");
+                    </script>
+                    <?php
+                }else if($fetch["status"] == 0){
+                    ?>
+                       <script>
+                           alert("Sorry, your account must verify first, before you recover your password !");
+                           window.location.replace("index.php");
+                       </script>
+                   <?php
+                }else{
+                    // generate token by binaryhexa 
+                    $token = bin2hex(random_bytes(50));
+        
+                    //session_start ();
+                    $_SESSION['token'] = $token;
+                    $_SESSION['email'] = $email;
+        
+                    require "Mail/phpmailer/PHPMailerAutoload.php";
+                    $mail = new PHPMailer;
+        
+                    $mail->isSMTP();
+                    $mail->Host='smtp.gmail.com';
+                    $mail->Port=587;
+                    $mail->SMTPAuth=true;
+                    $mail->SMTPSecure='tls';
+        
+                    // 
+                    $mail->Username='primusdentalproj@gmail.com';
+                    $mail->Password='utqcomtrxhiakmcc';
+        
+                    // send by h-hotel email
+                    $mail->setFrom('primusdentalproj@gmail.com', 'Password Reset');
+                    // get email from input
+                    $mail->addAddress($_POST["email"]);
+                    //$mail->addReplyTo
+        
+                    // HTML body
+                    $mail->isHTML(true);
+                    $mail->Subject="Recover your password";
+                    $mail->Body="<b>Dear User</b>
+                    <h3>We received a request to reset your password.</h3>
+                    <p>Kindly click the below link to reset your password</p>
+                    https://me.stud.vts.su.ac.rs/authpw.php
+                    <br><br>";
+        
+                    if(!$mail->send()){
+                        ?>
+                            <script>
+                                alert("<?php echo " Invalid Email "?>");
+                            </script>
+                        <?php
+                    }else{
+                        ?>
+                            <script>
+                                alert("Check your E-mail for Activation Link!");
+                                window.location.replace("index.php");
+                            </script>
+                        <?php
+                    }
                 }
             }
-            ?> 
+        ?>
      <!-- custom js -->
     <script src="register.js"></script>
     <!-- bootstrap js -->

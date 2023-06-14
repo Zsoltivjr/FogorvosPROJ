@@ -1,6 +1,6 @@
 <?php
     session_start();
-        if(empty($_SESSION['username']) || $_SESSION['username'] == ''){
+        if(empty($_SESSION['email']) || $_SESSION['email'] == ''){
             header("Location: index.php");
         die();
         }

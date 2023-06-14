@@ -33,17 +33,17 @@
                 header('location:login.php');
             }
                 $username = $_SESSION['username'];
-                if ($username == 'superuser'){
+                if ($username == 'zsolt'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/admin.php">Admin<span class="sr-only">(current)</span></a>
                 </li>';
                 }
-                if ($username == 'jani'){
+                if ($username == 'klaudia'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/doctorpanel.php">Visit Appointments<span class="sr-only">(current)</span></a>
                 </li>';
                 }
-                if ($username == 'dorka'){
+                if ($username == 'helena'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/doctorpanel.php">Visit Appointments<span class="sr-only">(current)</span></a>
                 </li>';

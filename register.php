@@ -1,3 +1,87 @@
+<?php session_start(); ?>
+<?php
+    include 'cfg.php';
+    if(isset($_POST["register"])){
+        $email = $_POST["email"];
+        $password = $_POST["password"];
+        $userN = $_POST['username'];
+        $fnamE = $_POST['firstname'];
+        $lnamE = $_POST['lastname'];
+        $bday = $_POST['birthday'];
+        $gender = $_POST['gender'];
+
+        $check_query = mysqli_query($con, "SELECT * FROM register where username ='$userN'");
+        $rowCount = mysqli_num_rows($check_query);
+        if(!empty($userN)){
+          if($rowCount > 0){
+            ?>
+            <script>
+                alert("Username Already Exists!");
+                window.location.replace('register.php');
+            </script>
+            <?php
+        }
+        }
+        $check_query = mysqli_query($con, "SELECT * FROM register where email ='$email' or username = '$userN'");
+        $rowCount = mysqli_num_rows($check_query);
+
+        if(!empty($email) && !empty($password)){
+            if($rowCount > 0){
+                ?>
+                <script>
+                    alert("User with email already exist!");
+                </script>
+                <?php
+            }else{
+                $password_hash = password_hash($password, PASSWORD_BCRYPT);
+
+                $result = mysqli_query($con, 
+                "INSERT INTO register (email, password, status,username,firstname,lastname,birthday,gender) 
+                VALUES ('$email', '$password_hash', 0,'$userN','$fnamE','$lnamE','$bday','$gender')");
+    
+                if($result){
+                    $otp = rand(100000,999999);
+                    $_SESSION['otp'] = $otp;
+                    $_SESSION['mail'] = $email;
+                    require "Mail/phpmailer/PHPMailerAutoload.php";
+                    $mail = new PHPMailer;
+    
+                    $mail->isSMTP();
+                    $mail->Host='smtp.gmail.com';
+                    $mail->Port=587;
+                    $mail->SMTPAuth=true;
+                    $mail->SMTPSecure='tls';
+    
+                    $mail->Username='primusdentalproj@gmail.com';
+                    $mail->Password='utqcomtrxhiakmcc';
+    
+                    $mail->setFrom('primusdentalproj@gmial.com', 'OTP Verification');
+                    $mail->addAddress($_POST["email"]);
+    
+                    $mail->isHTML(true);
+                    $mail->Subject="Your verify code";
+                    $mail->Body="<p>Dear user, </p> <h3>Your verify OTP code is $otp <br></h3>";
+    
+                    if(!$mail->send()){
+                        ?>
+                            <script>
+                                alert("<?php echo "Register Failed, Invalid Email "?>");
+                            </script>
+                        <?php
+                    }else{
+                        ?>
+                        <script>
+                            alert("<?php echo "Register Successfully, OTP sent to " . $email ?>");
+                            window.location.replace('verification.php');
+                        </script>
+                        <?php
+                    }
+                }
+            }
+        }
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,12 +127,17 @@
       <!-- navbar ends -->
       <div id="flyIn" class="content-section text-center mb-5">
         <h1 class="display-4 pb-5">Register to Primus Dental</h1>
-        <p>We would be honored to have you as our patient and look forward to helping you achieve a healthy and beautiful smile.</p>
+        <p>We would be honored to have you as our patient and look forward to helping you achieve a healthy and beautiful smile. <br></p>
+        <h2>You must be at least 18 years old to sign up for this site.</h2>
         <div class="container">
             <div class="row">
               <div id="custom-sizing" class="col-lg pt-5">
                 <form name="myRegister" method="POST" onsubmit="return checkRegister()" enctype="multipart/form-data">
-                    <div class="form-group  ">
+                    <div class="form-group">
+                      <label>E-mail</label>
+                      <input type="text" class="form-control text-center" autocomplete="off" maxlength="30" name="email">
+                    </div>
+                    <div class="form-group">
                       <label>Username</label>
                       <input type="text" class="form-control text-center" autocomplete="off" minlength="4" maxlength="16" name="username">
                     </div>
@@ -91,7 +180,7 @@
                       </div>
                     </div>
                     <div class="pt-3">
-                        <button name="submit" type="submit" class="btn btn-success">Submit</button>     
+                        <button name="register" type="submit" class="btn btn-success">Submit</button>     
                     </div>
                   </form>
               </div>
@@ -101,30 +190,6 @@
             </div>  
         </div>
       </div>
-      <?php
-           include 'cfg.php';
-           //register-start
-            if(isset($_POST['submit'])){
-              $userN = $_POST['username'];
-              $passW = $_POST['password'];
-              $fnamE = $_POST['firstname'];
-              $lnamE = $_POST['lastname'];
-              $bday = $_POST['birthday'];
-              $gender = $_POST['gender'];
-              
-              $sql = "insert INTO `register` (username,password,firstname,lastname,birthday,gender) 
-              VALUES ('$userN','$passW','$fnamE','$lnamE','$bday','$gender')";
-            
-              $result = mysqli_query($con,$sql);
-              if($result){
-                echo "<script>
-                alert('Registered Successfully! Redirecting To Login')
-                window.location.href='login.php'
-                </script>";
-              }
-              }
-          //register-end
-      ?>
       <!-- content ends -->
       <footer id="sticky-footer" class="flex-shrink-1 py-4 bg-dark text-white-50 pb-0">
         <div class="container text-center">
@@ -141,6 +206,6 @@
     crossorigin="anonymous"></script>
      <!-- Datepicker -->
      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-     <script src="datepicker.js"></script>
+     <script src="datepickerReg.js"></script>
 </body>
 </html>

@@ -1,40 +1,48 @@
 <!-- php -->
 <?php
 session_start();
-  include 'cfg.php';
-  
+include 'cfg.php';
+
   // checks if the user exists
-  if(isset($_POST['login'])){
-    $Username = $_POST['username'];
-    $Pass = $_POST['password'];
+  if(isset($_POST["login"])){
+    $email = mysqli_real_escape_string($con, trim($_POST['email']));
+    $password = trim($_POST['password']);
+    
+    $sql = mysqli_query($con, "SELECT * FROM register WHERE email = '$email'");
+    $count = mysqli_num_rows($sql);
+        if($count > 0){
+            $fetch = mysqli_fetch_assoc($sql);
+            $hashpassword = $fetch["password"];
+            $_SESSION['email'] = $fetch['email']; 
+            $_SESSION['firstname'] = $fetch['firstname'];
+            $_SESSION['lastname'] = $fetch['lastname'];
+            $_SESSION['username'] = $fetch['username'];
+            $_SESSION['gender'] = $fetch['gender'];
+            $_SESSION['bday'] = $fetch['birthday'];
 
-    $select = mysqli_query($con, "SELECT * FROM register WHERE username = '$Username' AND password = '$Pass'");
-    $row = mysqli_fetch_array($select);
-    // if exists then saves the data from the user
-    if(is_array($row)){
-      $_SESSION["username"] = $row ['username'];
-      $_SESSION["password"] = $row ['password'];
-
-      $username = $_SESSION["username"]; 
-      $query = "SELECT * FROM register WHERE username = '$username'"; 
-      $result = mysqli_query($con, $query);
-      
-      $_SESSION["firstname"] = $row ['firstname'];
-      $_SESSION["lastname"] = $row ['lastname'];
-      $_SESSION["bday"] = $row ['birthday'];
-      $_SESSION["gender"] = $row ['gender'];
-    } else {
-      echo "<script>
-      alert('Invalid Username or Password, try again!')
-      window.location.href='login.php'
-      </script>";
-    }
-  }
-
-  if (isset($_SESSION["username"])){
-    header("Location: loggedin.php");
-  }
-
+            if($fetch["status"] == 0){
+                ?>
+                <script>
+                    alert("Please verify email account before login.");
+                </script>
+                <?php
+            }else if(password_verify($password, $hashpassword)){
+                ?>
+                <script>
+                    alert('Login successful!')
+                    window.location.href='loggedin.php'
+                </script>
+                <?php
+            }else{
+                ?>
+                <script>
+                    alert("email or password invalid, please try again.");
+                </script>
+                <?php
+            }
+        }
+            
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -80,24 +88,25 @@ session_start();
       <div id="flyIn" class="content-section text-center mb-5">
         <h1 class="display-4 pb-5">Log in to Your Primus Dental Account</h1>
         <p>If you're already registered an account, fill out the username and password to log in and start making appointments!</p>
-        <div class="container ">
+        <div class="container">
             <div class="row">
               <div id="custom-sizing" class="col-lg pt-5">
-                <form action="login.php" method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data" name="login">
                     <div class="form-group">
                       <br><br>
-                      <label">Username</label>
-                      <input type="text" class="form-control text-center" autocomplete="off" minlength="4" maxlength="16" name="username" required>
+                      <label">E-mail</label>
+                      <input type="text" class="form-control text-center" name="email" autocomplete="off" maxlength="50" required>
                     </div>
                     <div class="form-group">
                       <label>Password</label>
-                      <input type="password" class="form-control text-center" autocomplete="off" minlength="6" maxlength="16" name="password" required>
+                      <input type="password" id="password" class="form-control text-center" name="password" autocomplete="off" required>
+                      <i class="bi bi-eye-slash" id="togglePassword"></i> 
                     </div>
                     <div class="pt-3">
-                      <button id="login-anim" name="login" type="submit" class="btn btn-primary" value="login">Log in</button>          
+                      <button id="login-anim" name="login" type="submit" class="btn btn-primary">Log in</button>          
                     </div>
                   </form>
-                  <a href="resetpw.php" class="btn btn-danger mt-3" value="login">Reset Password</a>
+                  <a href="resetpw.php" class="btn btn-danger mt-3">Reset Password</a>
               </div>
               <div id="custom-sizing" class="col-lg text-center p-5">
                 <img src="img/welcome.jpg" class="img-fluid rounded" alt="dentinst-in-action">
@@ -123,5 +132,18 @@ session_start();
      <!-- Datepicker -->
      <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
      <script src="datepicker.js"></script>
+     <script>
+    const toggle = document.getElementById('togglePassword');
+    const password = document.getElementById('password');
+
+    toggle.addEventListener('click', function(){
+        if(password.type === "password"){
+            password.type = 'text';
+        }else{
+            password.type = 'password';
+        }
+        this.classList.toggle('bi-eye');
+    });
+</script>
 </body>
 </html> 

@@ -1,3 +1,10 @@
+<?php  session_start();
+            include 'cfg.php'; 
+            if(!isset($_SESSION['email'])){
+                header('location:login.php');
+                exit();
+            }
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -27,22 +34,17 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav mr-auto justify-content-center">
           <?php
-            session_start();
-            include 'cfg.php'; 
-            if(!isset($_SESSION['username'])){
-                header('location:login.php');
-            }
                 $username = $_SESSION['username'];
-                if ($username == 'superuser'){
+                if ($username == 'zsolt'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/admin.php">Admin<span class="sr-only">(current)</span></a>
                 </li>';
-                }if ($username == 'jani'){
+                }if ($username == 'klaudia'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/doctorpanel.php">Visit Appointments<span class="sr-only">(current)</span></a>
                 </li>';
                 }
-                if ($username == 'dorka'){
+                if ($username == 'helena'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/doctorpanel.php">Visit Appointments<span class="sr-only">(current)</span></a>
                 </li>';
@@ -77,6 +79,7 @@
                             echo 
                             '
                             <ul class="list-group list-group-flush pt-3 pb-5">
+                              <li class="list-group-item list-group-item-primary">Email: '.$_SESSION["email"].'</li>
                               <li class="list-group-item list-group-item-primary">Username: '.$_SESSION["username"].'</li>
                               <li class="list-group-item list-group-item-primary">First Name: '.$_SESSION["firstname"].'</li>
                               <li class="list-group-item list-group-item-primary">Last Name: '.$_SESSION["lastname"].'</li>
@@ -96,19 +99,17 @@
                             $id=$row['id'];
                             $desc=$row['description'];
                             $date=$row['date'];
+                            $time=$row['time'];
                             $doc=$row['doctor'];
                             echo 
                             '<p>You reserved an appoitment at <br> '.$date.'.</p>
                             <p>Your reason of visit: <br> '.$desc.'</p>
+                            <p>Time of Visit: <br> '.$time.' h</p>
                             <p class="border-bottom">Chosen Doctor: <br> '.$doc.' 
-                            <br><a class="btn btn-danger mt-1 mb-1" href="user.php?removetermin='.$id.'">Delete Appointment </a></p>';
-                             // delete function
-                            if (isset($_GET['removetermin'])) {
-                              $id=$_GET['removetermin'];
-                              $sql = "DELETE FROM appointment WHERE id=$id";
-                              $result = mysqli_query($con, $sql);
-                              header("Location: user.php");
-                          }
+                            <br><a class="btn btn-success mt-1 mb-1" href="updateuser.php?updateid='.$id.'">Change Appointment </a>
+                            <a class="btn btn-danger mt-1 mb-1" href="delete.php?removetermin='.$id.'">Delete Appointment </a></p>
+                            ';
+                            
                         }
                     } else {
                       echo '<p>You have no appointments.</p > <br>

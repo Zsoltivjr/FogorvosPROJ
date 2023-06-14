@@ -33,17 +33,17 @@
                 header('location:login.php');
             }
                 $username = $_SESSION['username'];
-                if ($username == 'superuser'){
+                if ($username == 'zsolt'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/admin.php">Admin<span class="sr-only">(current)</span></a>
                 </li>';
                 }
-                if ($username == 'jani'){
+                if ($username == 'klaudia'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/doctorpanel.php">Visit Appointments<span class="sr-only">(current)</span></a>
                 </li>';
                 }
-                if ($username == 'dorka'){
+                if ($username == 'helena'){
                   echo ' <li class="nav-item active">
                   <a class="nav-link text-warning" href="admin/doctorpanel.php">Visit Appointments<span class="sr-only">(current)</span></a>
                 </li>';
@@ -83,11 +83,11 @@
               <div id="custom-sizing" class="col-lg text-left">
                 <h2>Working Hours</h2>
                 <ul class="list-group list-group-flush">
-                    <li class="list-group-item">Ponedeljak od 13h do 19h</li>
-                    <li class="list-group-item">Utorak od 13h do 19h</li>
+                    <li class="list-group-item">Ponedeljak od 9h do 19h</li>
+                    <li class="list-group-item">Utorak od 9h do 19h</li>
                     <li class="list-group-item">Sreda od 9h do 19h</li>
                     <li class="list-group-item">Cetvrtak od 9h do 19h</li>
-                    <li class="list-group-item">Petak od 9h do 13h</li>
+                    <li class="list-group-item">Petak od 9h do 19h</li>
                 </ul>
               </div>
             </div>  
